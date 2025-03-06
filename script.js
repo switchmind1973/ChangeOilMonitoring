@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const oilChangeForm = document.getElementById('oilChangeForm');
     const lastEngineOil = document.getElementById('lastEngineOil');
