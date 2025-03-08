@@ -1,3 +1,15 @@
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.log('Service Worker registration failed:', error);
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   const oilChangeForm = document.getElementById('oilChangeForm');
   const lastEngineOil = document.getElementById('lastEngineOil');
@@ -8,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const toast = document.getElementById('toast');
   const resetButton = document.getElementById('resetButton');
 
-  let oilChangeLog = [];
+  // Load oilChangeLog from localStorage or initialize as empty array
+  let oilChangeLog = JSON.parse(localStorage.getItem('oilChangeLog')) || [];
 
   oilChangeForm.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -25,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
 
       oilChangeLog.push({ oilType, date: formattedDate, mileage });
+      localStorage.setItem('oilChangeLog', JSON.stringify(oilChangeLog)); // Save to localStorage
       updateDashboard();
       updateHistory();
       oilChangeForm.reset();
@@ -35,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   resetButton.addEventListener('click', function () {
       oilChangeLog = []; // Clear the log
+      localStorage.removeItem('oilChangeLog'); // Remove from localStorage
       updateDashboard();
       updateHistory();
       showToast('Oil change history reset!');
@@ -124,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 3000); // Hide after 3 seconds
   }
 
+  // Initialize the dashboard and history on page load
   updateDashboard();
   updateHistory();
 });
