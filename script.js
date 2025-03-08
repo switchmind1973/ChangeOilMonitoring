@@ -1,129 +1,129 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const oilChangeForm = document.getElementById('oilChangeForm');
-    const lastEngineOil = document.getElementById('lastEngineOil');
-    const nextEngineOil = document.getElementById('nextEngineOil');
-    const lastGearOil = document.getElementById('lastGearOil');
-    const nextGearOil = document.getElementById('nextGearOil');
-    const historyTableBody = document.querySelector('#historyTable tbody');
-    const toast = document.getElementById('toast');
-    const resetButton = document.getElementById('resetButton');
+  const oilChangeForm = document.getElementById('oilChangeForm');
+  const lastEngineOil = document.getElementById('lastEngineOil');
+  const nextEngineOil = document.getElementById('nextEngineOil');
+  const lastGearOil = document.getElementById('lastGearOil');
+  const nextGearOil = document.getElementById('nextGearOil');
+  const historyTableBody = document.querySelector('#historyTable tbody');
+  const toast = document.getElementById('toast');
+  const resetButton = document.getElementById('resetButton');
 
-    let oilChangeLog = [];
+  let oilChangeLog = [];
 
-    oilChangeForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+  oilChangeForm.addEventListener('submit', function (event) {
+      event.preventDefault();
 
-        const oilType = document.getElementById('oilType').value;
-        const date = document.getElementById('date').value;
-        const mileage = parseInt(document.getElementById('mileage').value);
+      const oilType = document.getElementById('oilType').value;
+      const date = document.getElementById('date').value;
+      const mileage = parseInt(document.getElementById('mileage').value);
 
-        // Format date as "Month Day, Year"
-        const formattedDate = new Date(date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
+      // Format date as "Month Day, Year"
+      const formattedDate = new Date(date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+      });
 
-        oilChangeLog.push({ oilType, date: formattedDate, mileage });
-        updateDashboard();
-        updateHistory();
-        oilChangeForm.reset();
+      oilChangeLog.push({ oilType, date: formattedDate, mileage });
+      updateDashboard();
+      updateHistory();
+      oilChangeForm.reset();
 
-        // Show toast notification for new entry
-        showToast(`New ${oilType === 'engine' ? 'Engine Oil' : 'Gear Oil'} entry added!`);
-    });
+      // Show toast notification for new entry
+      showToast(`New ${oilType === 'engine' ? 'Engine Oil' : 'Gear Oil'} entry added!`);
+  });
 
-    resetButton.addEventListener('click', function () {
-        oilChangeLog = []; // Clear the log
-        updateDashboard();
-        updateHistory();
-        showToast('Oil change history reset!');
-    });
+  resetButton.addEventListener('click', function () {
+      oilChangeLog = []; // Clear the log
+      updateDashboard();
+      updateHistory();
+      showToast('Oil change history reset!');
+  });
 
-    function updateDashboard() {
-        const engineOilLog = oilChangeLog.filter(entry => entry.oilType === 'engine');
-        const gearOilLog = oilChangeLog.filter(entry => entry.oilType === 'gear');
+  function updateDashboard() {
+      const engineOilLog = oilChangeLog.filter(entry => entry.oilType === 'engine');
+      const gearOilLog = oilChangeLog.filter(entry => entry.oilType === 'gear');
 
-        // Engine Oil
-        if (engineOilLog.length > 0) {
-            const lastEntry = engineOilLog[engineOilLog.length - 1];
-            lastEngineOil.innerHTML = `Last Change: ${lastEntry.date}, ${lastEntry.mileage} km`;
+      // Engine Oil
+      if (engineOilLog.length > 0) {
+          const lastEntry = engineOilLog[engineOilLog.length - 1];
+          lastEngineOil.innerHTML = `Last Change: ${lastEntry.date}, ${lastEntry.mileage} km`;
 
-            // Find the beginning of the current cycle
-            let beginningMileage = lastEntry.mileage;
-            for (let i = engineOilLog.length - 1; i >= 0; i--) {
-                if (i === 0 || engineOilLog[i].mileage <= engineOilLog[i - 1].mileage) {
-                    beginningMileage = engineOilLog[i].mileage;
-                    break;
-                }
-            }
+          // Find the beginning of the current cycle
+          let beginningMileage = lastEntry.mileage;
+          for (let i = engineOilLog.length - 1; i >= 0; i--) {
+              if (i === 0 || engineOilLog[i].mileage <= engineOilLog[i - 1].mileage) {
+                  beginningMileage = engineOilLog[i].mileage;
+                  break;
+              }
+          }
 
-            const targetOdo = beginningMileage + 1500; // Target ODO for Engine Oil
-            const remainingKm = targetOdo - lastEntry.mileage;
+          const targetOdo = beginningMileage + 1500; // Target ODO for Engine Oil
+          const remainingKm = targetOdo - lastEntry.mileage;
 
-            if (remainingKm <= 0) {
-                // Reset cycle if target ODO is reached
-                nextEngineOil.innerHTML = `Next Change at: ${lastEntry.mileage + 1500} km<br>Remaining: 1500 km`;
-                showToast('Engine Oil cycle reset!');
-            } else {
-                nextEngineOil.innerHTML = `Next Change at: ${targetOdo} km<br>Remaining: ${remainingKm} km`;
-            }
-        } else {
-            lastEngineOil.textContent = 'No data';
-            nextEngineOil.textContent = 'No data';
-        }
+          if (remainingKm <= 0) {
+              // Reset cycle if target ODO is reached
+              nextEngineOil.innerHTML = `Next Change at: ${lastEntry.mileage + 1500} km<br>Remaining: 1500 km`;
+              showToast('Engine Oil cycle reset!');
+          } else {
+              nextEngineOil.innerHTML = `Next Change at: ${targetOdo} km<br>Remaining: ${remainingKm} km`;
+          }
+      } else {
+          lastEngineOil.textContent = 'No data';
+          nextEngineOil.textContent = 'No data';
+      }
 
-        // Gear Oil
-        if (gearOilLog.length > 0) {
-            const lastEntry = gearOilLog[gearOilLog.length - 1];
-            lastGearOil.innerHTML = `Last Change: ${lastEntry.date}, ${lastEntry.mileage} km`;
+      // Gear Oil
+      if (gearOilLog.length > 0) {
+          const lastEntry = gearOilLog[gearOilLog.length - 1];
+          lastGearOil.innerHTML = `Last Change: ${lastEntry.date}, ${lastEntry.mileage} km`;
 
-            // Find the beginning of the current cycle
-            let beginningMileage = lastEntry.mileage;
-            for (let i = gearOilLog.length - 1; i >= 0; i--) {
-                if (i === 0 || gearOilLog[i].mileage <= gearOilLog[i - 1].mileage) {
-                    beginningMileage = gearOilLog[i].mileage;
-                    break;
-                }
-            }
+          // Find the beginning of the current cycle
+          let beginningMileage = lastEntry.mileage;
+          for (let i = gearOilLog.length - 1; i >= 0; i--) {
+              if (i === 0 || gearOilLog[i].mileage <= gearOilLog[i - 1].mileage) {
+                  beginningMileage = gearOilLog[i].mileage;
+                  break;
+              }
+          }
 
-            const targetOdo = beginningMileage + 6000; // Target ODO for Gear Oil
-            const remainingKm = targetOdo - lastEntry.mileage;
+          const targetOdo = beginningMileage + 6000; // Target ODO for Gear Oil
+          const remainingKm = targetOdo - lastEntry.mileage;
 
-            if (remainingKm <= 0) {
-                // Reset cycle if target ODO is reached
-                nextGearOil.innerHTML = `Next Change at: ${lastEntry.mileage + 6000} km<br>Remaining: 6000 km`;
-                showToast('Gear Oil cycle reset!');
-            } else {
-                nextGearOil.innerHTML = `Next Change at: ${targetOdo} km<br>Remaining: ${remainingKm} km`;
-            }
-        } else {
-            lastGearOil.textContent = 'No data';
-            nextGearOil.textContent = 'No data';
-        }
-    }
+          if (remainingKm <= 0) {
+              // Reset cycle if target ODO is reached
+              nextGearOil.innerHTML = `Next Change at: ${lastEntry.mileage + 6000} km<br>Remaining: 6000 km`;
+              showToast('Gear Oil cycle reset!');
+          } else {
+              nextGearOil.innerHTML = `Next Change at: ${targetOdo} km<br>Remaining: ${remainingKm} km`;
+          }
+      } else {
+          lastGearOil.textContent = 'No data';
+          nextGearOil.textContent = 'No data';
+      }
+  }
 
-    function updateHistory() {
-        historyTableBody.innerHTML = ''; // Clear existing rows
-        oilChangeLog.forEach(entry => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${entry.date}</td>
-                <td>${entry.oilType === 'engine' ? 'Engine Oil' : 'Gear Oil'}</td>
-                <td>${entry.mileage} km</td>
-            `;
-            historyTableBody.appendChild(row);
-        });
-    }
+  function updateHistory() {
+      historyTableBody.innerHTML = ''; // Clear existing rows
+      oilChangeLog.forEach(entry => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+              <td>${entry.date}</td>
+              <td>${entry.oilType === 'engine' ? 'Engine Oil' : 'Gear Oil'}</td>
+              <td>${entry.mileage} km</td>
+          `;
+          historyTableBody.appendChild(row);
+      });
+  }
 
-    function showToast(message) {
-        toast.textContent = message;
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000); // Hide after 3 seconds
-    }
+  function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+          toast.classList.remove('show');
+      }, 3000); // Hide after 3 seconds
+  }
 
-    updateDashboard();
-    updateHistory();
+  updateDashboard();
+  updateHistory();
 });
