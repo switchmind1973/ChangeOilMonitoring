@@ -1,6 +1,6 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('https://github.com/switchmind1973/ChangeOilMonitoring/blob/9580fa87d9613a8ba7a739f94356b88cfabe35a9/script.js')
+      navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
           console.log('Service Worker registered:', registration);
         })
