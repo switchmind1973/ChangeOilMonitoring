@@ -1,12 +1,12 @@
 const CACHE_NAME = 'oil-monitor-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/icon-192x192.png',
-  '/icon-512x512.png'
+  '/ChangeOilMonitoring/',
+  '/ChangeOilMonitoring/index.html',
+  '/ChangeOilMonitoring/styles.css',
+  '/ChangeOilMonitoring/script.js',
+  '/ChangeOilMonitoring/manifest.json',
+  '/ChangeOilMonitoring/icon-192x192.png',
+  '/ChangeOilMonitoring/icon-512x512.png'
 ];
 
 // Install the service worker and cache assets
