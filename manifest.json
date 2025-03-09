@@ -1,20 +1,20 @@
 {
-    "short_name": "OilMonitor",
-    "name": "Motorcycle Oil Change Monitoring",
-    "icons": [
-      {
-        "src": "icon-192x192.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "icon-512x512.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ],
-    "start_url": "/ChangeOilMonitoring/",
-    "display": "standalone",
-    "background_color": "#1e1e1e",
-    "theme_color": "#ff5722"
-  }
+  "short_name": "OilMonitor",
+  "name": "Motorcycle Oil Change Monitoring",
+  "icons": [
+    {
+      "src": "/ChangeOilMonitoring/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/ChangeOilMonitoring/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/ChangeOilMonitoring/",
+  "display": "standalone",
+  "background_color": "#1e1e1e",
+  "theme_color": "#ff5722"
+}
